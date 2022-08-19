@@ -1,0 +1,40 @@
+* {
+    font-family: 'Roboto', sans-serif;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Limelight', cursive;
+}
+
+header {
+    text-align: center;
+    color: #FFF;
+    background-image: linear-gradient(to left, #000096, #2691fc);
+    padding: 10px 0;
+}
+
+main {
+    padding: 10px;
+    margin: auto;
+}
+
+form {
+    padding-bottom: 10px;
+    border-bottom: 2px solid #000;
+    margin-bottom: 10px;
+}
+
+input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.five-day {
+    margin-top: 10px;
+}
