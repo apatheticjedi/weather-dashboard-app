@@ -16,7 +16,7 @@
 6. Click buttons in "search-history" to display weather conditions for those cities
  */
 
-// get durrent and 5 future dates
+// get current and 5 future dates
 const currentDay = moment().format('MM/D/YYYY');
 const dayOne = moment().add(1, 'days').format('MM/D/YYYY');
 const dayTwo = moment().add(2, 'days').format('MM/D/YYYY');
@@ -33,29 +33,81 @@ var formSubmitHandler = function(event) {
     console.log(event);
 }
 
+// set dates on each div
+var setDates = function() {
+    var dateNowEl = document.querySelector('#date-now');
+    var dateOneEl = document.querySelector('#date1');
+    var dateTwoEl = document.querySelector('#date2');
+    var dateThreeEl = document.querySelector('#date3');
+    var dateFourEl = document.querySelector('#date4');
+    var dateFiveEl = document.querySelector('#date5');
+
+    dateNowEl.textContent = currentDay;
+    dateOneEl.textContent = dayOne;
+    dateTwoEl.textContent = dayTwo;
+    dateThreeEl.textContent = dayThree;
+    dateFourEl.textContent = dayFour;
+    dateFiveEl.textContent = dayFive;
+}
+
+// get current weather
 var getWeatherNow = function(id) {
     fetch(`https://api.openweathermap.org/data/2.5/weather?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function(response) {
         response.json().then(function(data){
-            console.log(data);
-            // currentWeatherEl.textContent = "";
             var name = data.name
-            var temp = data.main.temp;
+            var temp = Math.round(data.main.temp);
             var wind = data.wind.speed;
             var humidity = data.main.humidity;
+            var weather = data.weather[0].id;
 
-            console.log(name, temp, wind, humidity);
+            var currentCityEl = document.querySelector('#current-city');
+            var currentTempEl = document.querySelector('#current-temp');
+            var currentWindEl = document.querySelector('#current-wind');
+            var currentHumidEl = document.querySelector('#current-humidity');
+            var currentIconEl = document.querySelector('#current-icon');
+
+            currentCityEl.textContent = name;
+            currentTempEl.textContent = temp;
+            currentWindEl.textContent = wind;
+            currentHumidEl.textContent = humidity;
+
+            // add current weather icon
+            if (weather >= 200 && weather < 300) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/11d@2x.png');
+            } else if (weather >= 00 && weather < 400){
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/09d@2x.png');
+            } else if (weather >= 500 && weather <= 504){
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/10d@2x.png');
+            } else if (weather === 511) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/13d@2x.png');
+            } else if (weather >= 520 && weather <= 531) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/09d@2x.png');
+            } else if (weather >= 600 && weather <= 622) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/13d@2x.png');
+            } else if (weather >= 700 && weather <= 781) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/50d@2x.png');
+            } else if (weather === 800) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/01d@2x.png'); 
+            } else {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/02d@2x.png');
+            }
         })
     })
 };
 
+// get 5-day forecast
 var getForecast = function(id) {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&exclude=hourly&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function(response) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function(response) {
         response.json().then(function(data){
             console.log(data);
+
+
         })
     })
 };
+
+citySearchEl.addEventListener("submit", formSubmitHandler);
 
 getForecast("5746545");
 getWeatherNow("5746545");
-citySearchEl.addEventListener("submit", formSubmitHandler);
+setDates();
