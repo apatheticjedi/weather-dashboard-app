@@ -25,7 +25,7 @@
         <div class="sidebar col-4 col-md-3 col-lg-2 justify-content-around">
             <form id="search">
                 <h3>Search for a City:</h3>
-                <input type="text" placeholder="City Name" />
+                <input type="text" id="city-name" placeholder="City Name" />
                 <button type="submit" class="btn btn-primary btn-block" id="submit">Search</button>
             </form>
             <div class="search-history" id="search-history">
@@ -41,8 +41,8 @@
         </div>
         <div class="forecast col-8 col-md-9 col-lg-10">
             <h2>Current Weather for:</h2>
-            <div class="current-weather col-12 border">
-                <p id="city">City/today's date <i class="fa-solid fa-cloud-sun"></i></p>
+            <div id="current-weather" class="col-12 border">
+                <p id="city"><i class="fa-solid fa-cloud-sun"></i></p>
                 <p>Temp: </p>
                 <p>Wind: </p>
                 <p>Humidity: </p>
@@ -99,6 +99,7 @@
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/8a1abe8f9f.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="./assets/js/script.js"></script>
 
 </body>
