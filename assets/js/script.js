@@ -18,7 +18,7 @@
 
 
 var getWeather = function() {
-    fetch("https://api.openweathermap.org/data/2.5/onecall?lat=45.5152&lon=122.6784&appid=00b68751387b09fcbe309460d5343981").then(function(response) {
+    fetch("https://api.openweathermap.org/data/2.5/onecall?lat=45.5152&lon=122.6784&appid=b703055832e00b15d0222758c80b06ce").then(function(response) {
         response.json().then(function(data){
             console.log(data);
         })
