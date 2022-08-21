@@ -16,41 +16,15 @@
 6. Click buttons in "search-history" to display weather conditions for those cities
  */
 
-// get current and 5 future dates
-const currentDay = moment().format('MM/D/YYYY');
-const dayOne = moment().add(1, 'days').format('MM/D/YYYY');
-const dayTwo = moment().add(2, 'days').format('MM/D/YYYY');
-const dayThree = moment().add(3, 'days').format('MM/D/YYYY');
-const dayFour = moment().add(4, 'days').format('MM/D/YYYY');
-const dayFive = moment().add(5, 'days').format('MM/D/YYYY');
-
 var citySearchEl = document.querySelector("#submit");
-var cityNameEl = document.querySelector("#city-name");
-var currentWeatherEl = document.querySelector("#current-weather");
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
     let cityName = document.getElementById('city-name').value.toLowerCase();
+
     getWeatherNow(cityName);
-    // saveName();
-}
-
-// set dates on each div
-var setDates = function () {
-    var dateNowEl = document.querySelector('#date-now');
-    var dateOneEl = document.querySelector('#date1');
-    var dateTwoEl = document.querySelector('#date2');
-    var dateThreeEl = document.querySelector('#date3');
-    var dateFourEl = document.querySelector('#date4');
-    var dateFiveEl = document.querySelector('#date5');
-
-    dateNowEl.textContent = currentDay;
-    dateOneEl.textContent = dayOne;
-    dateTwoEl.textContent = dayTwo;
-    dateThreeEl.textContent = dayThree;
-    dateFourEl.textContent = dayFour;
-    dateFiveEl.textContent = dayFive;
-}
+    saveName();   
+};
 
 // get current weather
 var getWeatherNow = function (cityName) {
@@ -59,11 +33,12 @@ var getWeatherNow = function (cityName) {
 
             var weather = data.weather[0].id;
             var currentIconEl = document.querySelector('#current-icon');
-
+            
+            document.getElementById('date-now').innerHTML = ` (${moment().format('MM/D/YYYY')})`;
             document.getElementById('current-city').innerHTML = data.name;
-            document.getElementById('current-temp').innerHTML = Math.round(data.main.temp);
-            document.getElementById('current-wind').innerHTML = data.wind.speed;
-            document.getElementById('current-humidity').innerHTML = data.main.humidity;
+            document.getElementById('current-temp').innerHTML = `${Math.round(data.main.temp)}&deg;F`;
+            document.getElementById('current-wind').innerHTML = `${data.wind.speed} MPH`;
+            document.getElementById('current-humidity').innerHTML = `${data.main.humidity}%`;
 
             // add current weather icon
             if (weather >= 200 && weather <= 232) {
@@ -82,11 +57,14 @@ var getWeatherNow = function (cityName) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/50d@2x.png');
             } else if (weather === 800) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/01d@2x.png');
+            } else if (weather >= 803 && weather <= 804) {
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/03d@2x.png');
             } else {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/02d@2x.png');
             }
-            getForecast(data.id)
 
+            getForecast(data.id);
+            document.querySelector('#city-name').value = "";
         })
     })
 };
@@ -95,15 +73,14 @@ var getWeatherNow = function (cityName) {
 var getForecast = function (id) {
     fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(response => response.json()).then(data => {
         let index = 1
-        for (let i = 0; i <= data.list.length; i+=8) {
-            console.log(data.list[i]);
-            // document.getElementById(`date${index}`).innerHTML = data.list[i].dt_txt.split(" ")[0];
+        for (let i = 0; i <= data.list.length; i += 8) {
             var iconEl = document.getElementById(`icon${index}`);
             var weatherId = data.list[i].weather[0].id;
-
-            document.getElementById(`temp${index}`).innerHTML = Math.round(data.list[i].main.temp);
-            document.getElementById(`wind${index}`).innerHTML = data.list[i].wind.speed;
-            document.getElementById(`humid${index}`).innerHTML = data.list[i].main.humidity;
+            
+            document.getElementById(`date${index}`).innerHTML = `${moment().add(index, 'days').format('MM/D/YYYY')}:`;
+            document.getElementById(`temp${index}`).innerHTML = `${Math.round(data.list[i].main.temp)}&deg;F`;
+            document.getElementById(`wind${index}`).innerHTML = `${data.list[i].wind.speed} MPH`;
+            document.getElementById(`humid${index}`).innerHTML = `${data.list[i].main.humidity}%`;
 
             // add weather icon for each day
             if (weatherId >= 200 && weatherId <= 232) {
@@ -122,6 +99,8 @@ var getForecast = function (id) {
                 iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/50d@2x.png'></img>";
             } else if (weatherId === 800) {
                 iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/01d@2x.png'></img>";
+            } else if (weatherId >= 803 && weatherId <= 804) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/03d@2x.png'></img>";
             } else {
                 iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/02d@2x.png'></img>";
             }
@@ -130,6 +109,9 @@ var getForecast = function (id) {
     })
 };
 
-setDates();
+// save city names to local storage
+var saveName = function () {
+    localStorage.setItem('names', document.getElementById('city-name').value);
+};
 
 citySearchEl.addEventListener("click", formSubmitHandler);
