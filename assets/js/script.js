@@ -24,17 +24,19 @@ const dayThree = moment().add(3, 'days').format('MM/D/YYYY');
 const dayFour = moment().add(4, 'days').format('MM/D/YYYY');
 const dayFive = moment().add(5, 'days').format('MM/D/YYYY');
 
-var citySearchEl = document.querySelector("#search");
+var citySearchEl = document.querySelector("#submit");
 var cityNameEl = document.querySelector("#city-name");
 var currentWeatherEl = document.querySelector("#current-weather");
 
-var formSubmitHandler = function(event) {
+var formSubmitHandler = function (event) {
     event.preventDefault();
-    console.log(event);
+    let cityName = document.getElementById('city-name').value.toLowerCase();
+    getWeatherNow(cityName);
+    // saveName();
 }
 
 // set dates on each div
-var setDates = function() {
+var setDates = function () {
     var dateNowEl = document.querySelector('#date-now');
     var dateOneEl = document.querySelector('#date1');
     var dateTwoEl = document.querySelector('#date2');
@@ -51,32 +53,24 @@ var setDates = function() {
 }
 
 // get current weather
-var getWeatherNow = function(id) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function(response) {
-        response.json().then(function(data){
-            var name = data.name
-            var temp = Math.round(data.main.temp);
-            var wind = data.wind.speed;
-            var humidity = data.main.humidity;
-            var weather = data.weather[0].id;
+var getWeatherNow = function (cityName) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function (response) {
+        response.json().then(function (data) {
 
-            var currentCityEl = document.querySelector('#current-city');
-            var currentTempEl = document.querySelector('#current-temp');
-            var currentWindEl = document.querySelector('#current-wind');
-            var currentHumidEl = document.querySelector('#current-humidity');
+            var weather = data.weather[0].id;
             var currentIconEl = document.querySelector('#current-icon');
 
-            currentCityEl.textContent = name;
-            currentTempEl.textContent = temp;
-            currentWindEl.textContent = wind;
-            currentHumidEl.textContent = humidity;
+            document.getElementById('current-city').innerHTML = data.name;
+            document.getElementById('current-temp').innerHTML = Math.round(data.main.temp);
+            document.getElementById('current-wind').innerHTML = data.wind.speed;
+            document.getElementById('current-humidity').innerHTML = data.main.humidity;
 
             // add current weather icon
-            if (weather >= 200 && weather < 300) {
+            if (weather >= 200 && weather <= 232) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/11d@2x.png');
-            } else if (weather >= 00 && weather < 400){
+            } else if (weather >= 300 && weather <= 321) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/09d@2x.png');
-            } else if (weather >= 500 && weather <= 504){
+            } else if (weather >= 500 && weather <= 504) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/10d@2x.png');
             } else if (weather === 511) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/13d@2x.png');
@@ -87,27 +81,55 @@ var getWeatherNow = function(id) {
             } else if (weather >= 700 && weather <= 781) {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/50d@2x.png');
             } else if (weather === 800) {
-                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/01d@2x.png'); 
+                currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/01d@2x.png');
             } else {
                 currentIconEl.setAttribute('src', 'http://openweathermap.org/img/wn/02d@2x.png');
             }
+            getForecast(data.id)
+
         })
     })
 };
 
 // get 5-day forecast
-var getForecast = function(id) {
-    fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function(response) {
-        response.json().then(function(data){
-            console.log(data);
+var getForecast = function (id) {
+    fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(response => response.json()).then(data => {
+        let index = 1
+        for (let i = 0; i <= data.list.length; i+=8) {
+            console.log(data.list[i]);
+            // document.getElementById(`date${index}`).innerHTML = data.list[i].dt_txt.split(" ")[0];
+            var iconEl = document.getElementById(`icon${index}`);
+            var weatherId = data.list[i].weather[0].id;
 
+            document.getElementById(`temp${index}`).innerHTML = Math.round(data.list[i].main.temp);
+            document.getElementById(`wind${index}`).innerHTML = data.list[i].wind.speed;
+            document.getElementById(`humid${index}`).innerHTML = data.list[i].main.humidity;
 
-        })
+            // add weather icon for each day
+            if (weatherId >= 200 && weatherId <= 232) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/11d@2x.png'></img>";
+            } else if (weatherId >= 300 && weatherId <= 321) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/09d@2x.png'></img>";
+            } else if (weatherId >= 500 && weatherId <= 504) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/10d@2x.png'></img>";
+            } else if (weatherId === 511) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/13d@2x.png'></img>";
+            } else if (weatherId >= 520 && weatherId <= 531) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/09d@2x.png'></img>";
+            } else if (weatherId >= 600 && weatherId <= 622) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/13d@2x.png'></img>";
+            } else if (weatherId >= 700 && weatherId <= 781) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/50d@2x.png'></img>";
+            } else if (weatherId === 800) {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/01d@2x.png'></img>";
+            } else {
+                iconEl.innerHTML = "<img src='http://openweathermap.org/img/wn/02d@2x.png'></img>";
+            }
+            index++;
+        }
     })
 };
 
-citySearchEl.addEventListener("submit", formSubmitHandler);
-
-getForecast("5746545");
-getWeatherNow("5746545");
 setDates();
+
+citySearchEl.addEventListener("click", formSubmitHandler);
