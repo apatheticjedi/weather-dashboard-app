@@ -1,44 +1,32 @@
-# 06 Server-Side APIs: Weather Dashboard
+<div id="top"></div>
 
-Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
+# Weather Dashboard App
 
-Use the [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) to retrieve weather data for cities. Read through the documentation for setup and usage instructions. You will use `localStorage` to store any persistent data.
+## About This Project
 
-## User Story
+![Weather Dashboard Screen Shot](./assets/images/screencapture-localhost-52330-index-html-2022-08-23-14_32_49.png)
 
-```
-AS A traveler
-I WANT to see the weather outlook for multiple cities
-SO THAT I can plan a trip accordingly
-```
+This is a weather dashboard where you can enter the name of the city in the search field. When you click 'submit' the current and 5-day forecast of temperature, wind speed, humidity, and an icon for that city  will populate the areas on the right. Cities previously searched are saved to localStorage and buttons of those cities are created to provide quick access to those weather forecasts.
 
-## Acceptance Criteria
 
-```
-GIVEN a weather dashboard with form inputs
-WHEN I search for a city
-THEN I am presented with current and future conditions for that city and that city is added to the search history
-WHEN I view current weather conditions for that city
-THEN I am presented with the city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
-WHEN I view the UV index
-THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
-WHEN I view future weather conditions for that city
-THEN I am presented with a 5-day forecast that displays the date, an icon representation of weather conditions, the temperature, the wind speed, and the humidity
-WHEN I click on a city in the search history
-THEN I am again presented with current and future conditions for that city
-```
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-The following image demonstrates the application functionality:
+## Built With
 
-![weather dashboard demo](./Assets/06-server-side-apis-homework-demo.png)
+* HTML
+* CSS
+* JavaScript
+* Moment.js
+* Google Fonts
+* [![JQuery][JQuery.com]][https://jquery.com/]
+* [![Bootstrap][Bootstrap.com]][https://getbootstrap.com]
 
-## Review
+## Website URL
 
-You are required to submit the following for review:
+https://apatheticjedi.github.io/weather-dashboard-app/
 
-* The URL of the deployed application.
+##
 
-* The URL of the GitHub repository. Give the repository a unique name and include a high-quality README describing the project.
+Created by David Lundt
 
-- - -
-© 2022 Trilogy Education Services, LLC, a 2U, Inc. brand. Confidential and Proprietary. All Rights Reserved.
+<p align="right">(<a href="#top">back to top</a>)</p>

@@ -23,7 +23,7 @@ var formSubmitHandler = function (event) {
     let cityName = document.getElementById('city-name').value.toLowerCase();
 
     getWeatherNow(cityName);
-    saveName();   
+  
 };
 
 // get current weather
@@ -31,11 +31,11 @@ var getWeatherNow = function (cityName) {
     fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function (response) {
         response.json().then(function (data) {
 
-            var weather = data.weather[0].id;
-            var currentIconEl = document.querySelector('#current-icon');
+            let weather = data.weather[0].id;
+            let currentIconEl = document.querySelector('#current-icon');
             
-            document.getElementById('date-now').innerHTML = ` (${moment().format('MM/D/YYYY')})`;
             document.getElementById('current-city').innerHTML = data.name;
+            document.getElementById('date-now').innerHTML = ` (${moment().format('MM/D/YYYY')})`;
             document.getElementById('current-temp').innerHTML = `${Math.round(data.main.temp)}&deg;F`;
             document.getElementById('current-wind').innerHTML = `${data.wind.speed} MPH`;
             document.getElementById('current-humidity').innerHTML = `${data.main.humidity}%`;
@@ -64,6 +64,7 @@ var getWeatherNow = function (cityName) {
             }
 
             getForecast(data.id);
+            saveName(); 
             document.querySelector('#city-name').value = "";
         })
     })
@@ -109,9 +110,15 @@ var getForecast = function (id) {
     })
 };
 
+let cityNameArr = [];
+
 // save city names to local storage
 var saveName = function () {
-    localStorage.setItem('names', document.getElementById('city-name').value);
+    let cityName = document.getElementById('current-city').innerHTML;
+    
+    cityNameArr.push(cityName)
+    localStorage.setItem('cityNames', JSON.stringify(cityNameArr));
+    console.log(cityNameArr);
 };
 
 citySearchEl.addEventListener("click", formSubmitHandler);
