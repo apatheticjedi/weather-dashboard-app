@@ -122,6 +122,7 @@ var saveName = function () {
         localStorage.setItem('cityNames', JSON.stringify(cityNameArr));
         savedBtn.textContent = cityName;
         savedBtn.className = "btn btn-secondary btn-block";
+        savedBtn.addEventListener('click', getWeatherNow(cityName));
         history.appendChild(savedBtn);
     }
 };
@@ -135,6 +136,7 @@ var getName = function () {
 
         savedBtn.textContent = cityNameArr[i];
         savedBtn.className = "btn btn-secondary btn-block";
+        savedBtn.addEventListener('click', getWeatherNow(cityNameArr[i]));
         history.appendChild(savedBtn);
     }
 };
