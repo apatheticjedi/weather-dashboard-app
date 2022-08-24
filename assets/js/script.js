@@ -17,23 +17,23 @@
  */
 
 var citySearchEl = document.querySelector("#submit");
+let cityNameArr = JSON.parse(localStorage.getItem('cityNames')) || [];
 
 var formSubmitHandler = function (event) {
     event.preventDefault();
     let cityName = document.getElementById('city-name').value.toLowerCase();
 
     getWeatherNow(cityName);
-  
 };
 
 // get current weather
-var getWeatherNow = function (cityName) {
-    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function (response) {
+var getWeatherNow = function (e) {
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${e}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(function (response) {
         response.json().then(function (data) {
 
             let weather = data.weather[0].id;
             let currentIconEl = document.querySelector('#current-icon');
-            
+
             document.getElementById('current-city').innerHTML = data.name;
             document.getElementById('date-now').innerHTML = ` (${moment().format('MM/D/YYYY')})`;
             document.getElementById('current-temp').innerHTML = `${Math.round(data.main.temp)}&deg;F`;
@@ -64,7 +64,7 @@ var getWeatherNow = function (cityName) {
             }
 
             getForecast(data.id);
-            saveName(); 
+            saveName();
             document.querySelector('#city-name').value = "";
         })
     })
@@ -77,7 +77,7 @@ var getForecast = function (id) {
         for (let i = 0; i <= data.list.length; i += 8) {
             var iconEl = document.getElementById(`icon${index}`);
             var weatherId = data.list[i].weather[0].id;
-            
+
             document.getElementById(`date${index}`).innerHTML = `${moment().add(index, 'days').format('MM/D/YYYY')}:`;
             document.getElementById(`temp${index}`).innerHTML = `${Math.round(data.list[i].main.temp)}&deg;F`;
             document.getElementById(`wind${index}`).innerHTML = `${data.list[i].wind.speed} MPH`;
@@ -110,15 +110,35 @@ var getForecast = function (id) {
     })
 };
 
-let cityNameArr = [];
 
 // save city names to local storage
 var saveName = function () {
     let cityName = document.getElementById('current-city').innerHTML;
-    
-    cityNameArr.push(cityName)
-    localStorage.setItem('cityNames', JSON.stringify(cityNameArr));
-    console.log(cityNameArr);
+
+    if (!cityNameArr.includes(cityName)) {
+        let history = document.getElementById('search-history');
+        let savedBtn = document.createElement('button');       
+
+        cityNameArr.push(cityName)
+        localStorage.setItem('cityNames', JSON.stringify(cityNameArr));
+        savedBtn.textContent = cityName;
+        savedBtn.className = "btn btn-secondary btn-block";
+        history.appendChild(savedBtn);
+    }
 };
 
+// get city names from local storage and create buttons
+var getName = function () {
+    let history = document.getElementById('search-history');
+
+    for (let i = 0; i < cityNameArr.length; i++) {
+        let savedBtn = document.createElement('button');
+
+        savedBtn.textContent = cityNameArr[i];
+        savedBtn.className = "btn btn-secondary btn-block";
+        history.appendChild(savedBtn);
+    }
+};
+
+getName();
 citySearchEl.addEventListener("click", formSubmitHandler);

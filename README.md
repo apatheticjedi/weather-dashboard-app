@@ -18,8 +18,8 @@ This is a weather dashboard where you can enter the name of the city in the sear
 * JavaScript
 * Moment.js
 * Google Fonts
-* [![JQuery][JQuery.com]][https://jquery.com/]
-* [![Bootstrap][Bootstrap.com]][https://getbootstrap.com]
+* JQuery
+* Bootstrap
 
 ## Website URL
 
