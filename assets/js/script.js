@@ -74,9 +74,9 @@ var getWeatherNow = function (e) {
 var getForecast = function (id) {
     fetch(`https://api.openweathermap.org/data/2.5/forecast?id=${id}&units=imperial&appid=b703055832e00b15d0222758c80b06ce`).then(response => response.json()).then(data => {
         let index = 1
-        for (let i = 0; i <= data.list.length; i += 8) {
-            var iconEl = document.getElementById(`icon${index}`);
-            var weatherId = data.list[i].weather[0].id;
+        for (let i = 0; i < data.list.length; i += 8) {
+            let iconEl = document.getElementById(`icon${index}`);
+            let weatherId = data.list[i].weather[0].id;
 
             document.getElementById(`date${index}`).innerHTML = `${moment().add(index, 'days').format('MM/D/YYYY')}:`;
             document.getElementById(`temp${index}`).innerHTML = `${Math.round(data.list[i].main.temp)}&deg;F`;
@@ -116,14 +116,20 @@ var saveName = function () {
 
     if (!cityNameArr.includes(cityName)) {
         let history = document.getElementById('search-history');
-        let savedBtn = document.createElement('button');       
+        let savedBtn = document.createElement('button');
 
         cityNameArr.push(cityName)
         localStorage.setItem('cityNames', JSON.stringify(cityNameArr));
         savedBtn.textContent = cityName;
         savedBtn.className = "btn btn-secondary btn-block";
-        savedBtn.addEventListener('click', getWeatherNow(cityName));
         history.appendChild(savedBtn);
+
+        let historyBtns = document.querySelectorAll('#search-history button');
+        historyBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                getWeatherNow(btn.textContent);
+            })
+        })
     }
 };
 
@@ -136,9 +142,14 @@ var getName = function () {
 
         savedBtn.textContent = cityNameArr[i];
         savedBtn.className = "btn btn-secondary btn-block";
-        savedBtn.addEventListener('click', getWeatherNow(cityNameArr[i]));
         history.appendChild(savedBtn);
     }
+    let historyBtns = document.querySelectorAll('#search-history button');
+    historyBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            getWeatherNow(btn.textContent);
+        })
+    })
 };
 
 getName();
