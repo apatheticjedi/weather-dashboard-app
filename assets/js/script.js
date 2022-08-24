@@ -110,7 +110,6 @@ var getForecast = function (id) {
     })
 };
 
-
 // save city names to local storage
 var saveName = function () {
     let cityName = document.getElementById('current-city').innerHTML;
